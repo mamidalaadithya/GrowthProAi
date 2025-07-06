@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './App.css';
 
 const MiniBusinessDashboard = () => {
-  // Sample data for different businesses
-  const sampleBusinesses = [
+  // Sample data for different businesses - wrapped in useMemo
+  const sampleBusinesses = useMemo(() => [
     {
       name: "Cake & Co",
       location: "Mumbai",
@@ -69,8 +69,7 @@ const MiniBusinessDashboard = () => {
         "Spice Trail - Where Chennai's Food Culture Thrives"
       ]
     }
-  ];
-
+  ], []);
   // State management
   const [formData, setFormData] = useState({
     name: '',
@@ -78,7 +77,6 @@ const MiniBusinessDashboard = () => {
   });
   const [businessData, setBusinessData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const [currentHeadlineIndex, setCurrentHeadlineIndex] = useState(0);
   const [recentSearches, setRecentSearches] = useState([]);
   const [showRecentSearches, setShowRecentSearches] = useState(false);
@@ -149,13 +147,7 @@ const MiniBusinessDashboard = () => {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.location) {
-      setError('Both business name and location are required');
-      return;
-    }
-    
     setLoading(true);
-    setError('');
     
     // Simulate API call delay
     setTimeout(() => {
@@ -219,7 +211,7 @@ const MiniBusinessDashboard = () => {
       averageRating: initialData.rating,
       highestRated: { name: initialData.name, rating: initialData.rating }
     });
-  }, []);
+  }, [sampleBusinesses]); // Added sampleBusinesses to dependency array
 
   // Toggle dark mode
   const toggleDarkMode = () => {
@@ -290,8 +282,6 @@ const MiniBusinessDashboard = () => {
                       placeholder="e.g., Mumbai"
                     />
                   </div>
-                  
-                  {error && <p className="text-red-500 text-sm">{error}</p>}
                   
                   <button
                     type="submit"
